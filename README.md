@@ -8,4 +8,5 @@ kubernetes. The credit for these belongs to [Eberhard Wolff](https://github.com/
 This repository is a fork of the original repository with the addition of consul and consul connect to the microservices.
 There are also some minor changes to the kubernetes deployment files to make them work with consul.
 
- -
+## Deployment Guides
+* [Consul](consul-setup/README.md)

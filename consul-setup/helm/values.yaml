@@ -1,0 +1,61 @@
+# Contains values that affect multiple components of the chart.
+global:
+  # The main enabled/disabled setting.
+  # If true, servers, clients, Consul DNS and the Consul UI will be enabled.
+  enabled: true
+  # The prefix used for all resources created in the Helm chart.
+  name: consul
+  # The consul image version.
+  image: hashicorp/consul:1.16.0
+  # The name of the datacenter that the agents should register as.
+  datacenter: dc1
+  # Enables TLS across the cluster to verify authenticity of the Consul servers and clients.
+  tls:
+    enabled: true
+  # Enables ACLs across the cluster to secure access to data and APIs.
+  acls:
+    # If true, automatically manage ACL tokens and policies for all Consul components.
+    manageSystemACLs: true
+  # Exposes Prometheus metrics for the Consul service mesh and sidecars.
+  metrics:
+    enabled: true
+    # Enables Consul servers and clients metrics.
+    enableAgentMetrics: true
+    # Configures the retention time for metrics in Consul servers and clients.
+    agentMetricsRetentionTime: "1m"
+# Configures values that configure the Consul server cluster.
+server:
+  enabled: true
+  # The number of server agents to run. This determines the fault tolerance of the cluster.
+  replicas: 1
+# Contains values that configure the Consul UI.
+ui:
+  enabled: true
+  # Defines the type of service created for the Consul UI (e.g. LoadBalancer, ClusterIP, NodePort).
+  # NodePort is primarily used for local deployments.
+  service:
+    type: NodePort
+  # Enables displaying metrics in the Consul UI.
+  metrics:
+    enabled: true
+    # The metrics provider specification.
+    provider: "prometheus"
+    # The URL of the prometheus metrics server.
+    baseURL: http://prometheus-server.default.svc.cluster.local
+# Configures and installs the automatic Consul Connect sidecar injector.
+connectInject:
+  enabled: true
+    # Enables metrics for Consul Connect sidecars.
+  metrics:
+    defaultEnabled: true
+  apiGateway:
+    enabled: true
+    # Image to use for the api-gateway-controller pods and gateway instances
+    image: "hashicorp/consul-api-gateway:0.5.1"
+    # Configuration settings for the GatewayClass
+    managedGatewayClass:
+      # Defines the type of service created for gateways (e.g. LoadBalancer, ClusterIP, NodePort)
+      # NodePort is primarily used for local deployments.
+      serviceType: NodePort
+      # Toggles the gateway ports to be mapped to host ports (used for local deployments)
+      useHostPorts: true

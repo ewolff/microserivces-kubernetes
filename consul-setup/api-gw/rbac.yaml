@@ -1,0 +1,53 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: consul-api-gateway-tokenreview-binding
+  namespace: consul
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - kind: ServiceAccount
+    name: consul-api-gateway
+    namespace: consul
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: consul-api-gateway-auth
+  namespace: consul
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: consul-api-gateway-auth-binding
+  namespace: consul
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: consul-api-gateway-auth
+subjects:
+  - kind: ServiceAccount
+    name: consul-api-gateway
+    namespace: consul
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: consul-auth-binding
+  namespace: consul
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: consul-api-gateway-auth
+subjects:
+  - kind: ServiceAccount
+    name: consul-server
+    namespace: consul

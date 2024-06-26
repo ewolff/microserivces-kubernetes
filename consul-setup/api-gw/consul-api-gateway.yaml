@@ -1,0 +1,15 @@
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: api-gateway
+  namespace: consul
+spec:
+  gatewayClassName: consul
+  listeners:
+  - protocol: HTTP # options: HTTP or HTTPS
+    port: 80 # options: 80 or 443 or custom
+    name: http
+    allowedRoutes:
+      namespaces:
+        from: All # options: All or Same or Specific
