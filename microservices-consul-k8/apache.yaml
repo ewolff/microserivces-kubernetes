@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: apache
+  name: apache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: apache
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: apache
+    spec:
+      serviceAccountName: apache
+      containers:
+      - image: docker.io/ewolff/microservice-kubernetes-demo-apache:latest
+        name: apache
+        ports:
+        - containerPort: 80
+        resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: apache
+  name: apache
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: apache
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: apache
+automountServiceAccountToken: true
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: apache
+spec:
+  protocol: http
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: api-gateway-demo-app
+spec:
+  destination:
+    name: apache
+  sources:
+    - name: demo-api-gateway
+      action: allow

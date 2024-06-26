@@ -127,3 +127,6 @@ replicaset.apps/consul-webhook-cert-manager-88b755bd7   1         1         1   
 NAME                             READY   AGE
 statefulset.apps/consul-server   1/1     18m
 ```
+
+you should also be able to reach the UI and log in with the bootstrap token.
+![consul-ui](../doc-images/consul-ui-default.png)

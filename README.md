@@ -9,4 +9,8 @@ This repository is a fork of the original repository with the addition of consul
 There are also some minor changes to the kubernetes deployment files to make them work with consul.
 
 ## Deployment Guides
-* [Consul](consul-setup/README.md)
+* [Consul](consul-setup/README.md) - How to install consul on kubernetes
+* [vanilla microservices](microservices-vanilla-k8/README.md) - How to deploy the microservices on kubernetes. These are the 
+  microservices without consul.
+* [service mesh microservices](microservices-consul-k8/README.md) - How to deploy the microservices on kubernetes with consul 
+  connect. These are the microservices utilising the service mesh.
