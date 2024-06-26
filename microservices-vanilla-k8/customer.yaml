@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: customer
+  name: customer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: customer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        run: customer
+    spec:
+      containers:
+      - image: docker.io/ewolff/microservice-kubernetes-demo-customer:latest
+        name: customer
+        ports:
+        - containerPort: 8080
+        resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: customer
+  name: customer
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: customer
+  type: ClusterIP

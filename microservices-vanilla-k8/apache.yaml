@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: apache
+  name: apache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: apache
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: apache
+    spec:
+      containers:
+      - image: docker.io/ewolff/microservice-kubernetes-demo-apache:latest
+        name: apache
+        ports:
+        - containerPort: 80
+        resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: apache
+  name: apache
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: apache
+  type: NodePort

@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: catalog
+  name: catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: catalog
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        run: catalog
+    spec:
+      containers:
+      - image: docker.io/ewolff/microservice-kubernetes-demo-catalog:latest
+        name: catalog
+        ports:
+        - containerPort: 8080
+        resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: catalog
+  name: catalog
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: catalog
+  type: ClusterIP
