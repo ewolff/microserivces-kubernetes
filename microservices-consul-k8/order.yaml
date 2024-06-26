@@ -16,6 +16,13 @@ spec:
     metadata:
       labels:
         run: order
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9102"
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/service-meta-version: "1"
+        consul.hashicorp.com/service-tags: "v1"
+
     spec:
       serviceAccountName: order
       containers:
