@@ -66,7 +66,8 @@ We will now onboard the remaining services in to the service mesh. We will do th
 kubectl apply -f microservices-consul-k8/ -n demo-app
 ```
 
-We can now see all services in the mesh and the list of intentions
+We can now see all services in the mesh and the list of intentions, Traffic between all these services is now secured
+with encryption, authentication and authorization.
 
 ![all services in mesh](../doc-images/consul-all-services.png)
 ![all services intentions](../doc-images/consul-all-intentions.png)

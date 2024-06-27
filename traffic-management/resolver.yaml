@@ -1,0 +1,12 @@
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceResolver
+metadata:
+  name: apache
+spec:
+  defaultSubset: v1
+  subsets:
+    v1:
+      filter: 'Service.Meta.version == 1'
+    v2:
+      filter: 'Service.Meta.version == 2'

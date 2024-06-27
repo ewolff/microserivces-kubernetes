@@ -1,0 +1,11 @@
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceSplitter
+metadata:
+  name: apache
+spec:
+  splits:
+    - weight: 80
+      serviceSubset: v1
+    - weight: 20
+      serviceSubset: v2
