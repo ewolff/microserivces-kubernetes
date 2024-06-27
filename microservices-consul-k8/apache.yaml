@@ -63,10 +63,10 @@ spec:
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:
-  name: api-gateway-demo-app
+  name: apache
 spec:
   destination:
     name: apache
   sources:
-    - name: demo-api-gateway
+    - name: api-gateway
       action: allow

@@ -97,6 +97,14 @@ routes and service intentions.
 kubectl apply -f api-gw/
 ```
 
+## Observability
+Consul will produce metrics for the service mesh, we can use prometheus to scrape these metrics. We will deploy the
+prometheus and grafana helm charts. This will allow us to visualise traffic in the consul UI
+
+```bash
+sh ./install-observabillity-suite.sh
+```
+
 ## Final Check
 All being well you should see resources similar to below in the consul namespace
 
