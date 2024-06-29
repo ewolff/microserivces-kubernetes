@@ -59,3 +59,14 @@ metadata:
   name: apache
 spec:
   protocol: http
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: catalog
+spec:
+  destination:
+    name: apache
+  sources:
+    - name: api-gateway
+      action: allow
