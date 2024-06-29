@@ -2,7 +2,7 @@
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceRouter
 metadata:
-  name: customer
+  name: apache
 spec:
   routes:
     - match:
@@ -11,11 +11,14 @@ spec:
             - name: "version"
               exact: "v1"
       destination:
-        service: customer
+        service: apache
+        serviceSubset: v1
+
     - match:
         http:
           queryParam:
             - name: "version"
               exact: "v2"
       destination:
-        service: catalog
+        service: apache
+        serviceSubset: v2

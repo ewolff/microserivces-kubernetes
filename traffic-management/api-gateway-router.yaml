@@ -1,0 +1,132 @@
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: route-root-demo-app
+spec:
+  parentRefs:
+  - name: api-gateway
+    namespace: consul
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - kind: Service
+      name: nginx
+      port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        prometheus.io/port: "9102"
+        prometheus.io/scrape: "true"
+      labels:
+        app: nginx
+        service: nginx
+    spec:
+      containers:
+      - image: nginx:stable-alpine
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx
+          name: nginx-config
+      serviceAccountName: nginx
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+          name: nginx-config
+        name: nginx-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    events {}
+    http {
+      include /etc/nginx/conf.d/*.conf;
+
+      server {
+        server_name localhost;
+        listen 80 default_server;
+
+        proxy_http_version 1.1;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_temp_file_write_size 64k;
+        proxy_connect_timeout 10080s;
+        proxy_send_timeout 10080;
+        proxy_read_timeout 10080;
+        proxy_buffer_size 64k;
+        proxy_buffers 16 32k;
+        proxy_busy_buffers_size 64k;
+        proxy_redirect off;
+        proxy_request_buffering off;
+        proxy_buffering off;
+
+        location / {
+          proxy_pass http://apache:80;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+          root   /usr/share/nginx/html;
+        }
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: nginx
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx
+automountServiceAccountToken: true
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: nginx
+spec:
+  protocol: "http"
+

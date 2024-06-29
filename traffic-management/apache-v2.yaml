@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: apache
+  name: apache-v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: apache
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: apache
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9102"
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/service-meta-version: "2"
+        consul.hashicorp.com/service-tags: "v2"
+    spec:
+      serviceAccountName: apache
+      containers:
+      - image: docker.io/ewolff/microservice-kubernetes-demo-apache:latest
+        name: apache
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+          - mountPath: /var/www/html/index.html
+            name: index-file
+            subPath: index.html
+      volumes:
+        - name: index-file
+          configMap:
+            name: apache-index
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-index
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Order Processing</title>
+        
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+        
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+        
+        <script
+                src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    
+    </head>
+    <body>
+    <h1>Order Processing - v2</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <a href="/customer/list.html">Customer</a>
+            </div>
+            <div class="col-md-4">List / add / remove customers</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="/catalog/list.html">Catalog</a>
+            </div>
+            <div class="col-md-4">List / add / remove items</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="/catalog/searchForm.html">Catalog</a>
+            </div>
+            <div class="col-md-4">Search Items</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="/order/">Order</a>
+            </div>
+            <div class="col-md-4">Create an order</div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+    
+    </body>
+    </html>
