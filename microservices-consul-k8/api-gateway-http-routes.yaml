@@ -3,7 +3,6 @@ apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
   name: route-root-demo-app
-  namespace: demo-app
 spec:
   parentRefs:
   - name: api-gateway
