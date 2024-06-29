@@ -63,7 +63,7 @@ spec:
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:
-  name: catalog
+  name: apache
 spec:
   destination:
     name: apache
