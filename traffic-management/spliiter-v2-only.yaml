@@ -1,9 +1,12 @@
 ---
 apiVersion: consul.hashicorp.com/v1alpha1
-kind: ServiceSplitter
+kind: ServiceResolver
 metadata:
   name: apache
 spec:
-  splits:
-    - weight: 100
-      serviceSubset: v2
+  defaultSubset: v2
+  subsets:
+    v1:
+      filter: 'Service.Meta.version == 1'
+    v2:
+      filter: 'Service.Meta.version == 2'
