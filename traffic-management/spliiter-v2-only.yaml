@@ -6,4 +6,4 @@ metadata:
 spec:
   splits:
     - weight: 100
-      service: catalog
+      serviceSubset: v2
