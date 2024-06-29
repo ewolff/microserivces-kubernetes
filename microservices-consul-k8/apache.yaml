@@ -59,25 +59,3 @@ metadata:
   name: apache
 spec:
   protocol: http
----
-apiVersion: consul.hashicorp.com/v1alpha1
-kind: ServiceIntentions
-metadata:
-  name: nginx
-spec:
-  destination:
-    name: nginx
-  sources:
-    - name: api-gateway
-      action: allow
----
-apiVersion: consul.hashicorp.com/v1alpha1
-kind: ServiceIntentions
-metadata:
-  name: apache
-spec:
-  destination:
-    name: apache
-  sources:
-    - name: nginx
-      action: allow
