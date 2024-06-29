@@ -63,10 +63,21 @@ spec:
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:
+  name: nginx
+spec:
+  destination:
+    name: nginx
+  sources:
+    - name: api-gateway
+      action: allow
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
   name: apache
 spec:
   destination:
     name: apache
   sources:
-    - name: api-gateway
+    - name: nginx
       action: allow
